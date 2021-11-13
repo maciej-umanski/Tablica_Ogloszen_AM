@@ -22,6 +22,7 @@ import MyWallScreen from "../screens/MyWallScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import { RootStackParamList, RootTabParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
+import AdvertScreen from "../screens/AdvertScreen";
 
 export default function Navigation({
   colorScheme,
@@ -63,6 +64,11 @@ function RootNavigator() {
         component={NotFoundScreen}
         options={{ title: "Oops!" }}
       />
+      <Stack.Screen
+      name="Advert"
+      component={AdvertScreen}
+      />
+      
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>

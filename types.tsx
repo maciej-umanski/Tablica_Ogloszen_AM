@@ -17,6 +17,7 @@ export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   Modal: undefined;
   NotFound: undefined;
+  Advert: { itemId: string };
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
@@ -36,3 +37,17 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
     BottomTabScreenProps<RootTabParamList, Screen>,
     NativeStackScreenProps<RootStackParamList>
   >;
+
+export type Advert = {
+    id: string,
+    author:{
+      id: number,
+      name: string,
+      surname:string
+    },
+    postTime: string,
+    content: string,
+    photos: string,
+    phoneNumber: string,
+    title: string
+  }
