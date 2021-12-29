@@ -1,43 +1,52 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { theme } from "../core/theme";
+import { Text, View } from "../components/Themed";
 import Button from "../components/Button";
 import Header from "../components/Header";
 import TextInput from "../components/TextInput";
-import { RootStackScreenProps } from "../types";
 
-import { Text, View } from "../components/Themed";
+import { loginUser } from "../store/actions/system";
 
-const Login = ({ navigation }: RootStackScreenProps<"Login">) => {
+const Login = ({ navigation, loginUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [invalidLogIn, isInvalidLogIn] = useState(false);
 
   const onLogin = () => {
-    //TODO: walidacja danych logowania
-    //TODO: Prawidłowe przełączenie okna lub modal informujący o niepowodzeniu
-    navigation.navigate("Root");
+    loginUser({ email: email, password: password }, (responseData) => {
+      if (responseData?.success) {
+        isInvalidLogIn(false);
+        navigation.navigate("Root");
+      } else {
+        isInvalidLogIn(true);
+      }
+    });
   };
+
   return (
     <View style={styles.container}>
       <Header>Login</Header>
       <TextInput
         label="Email"
         value={email}
-        onChangeText={(email) => setEmail(email)}
+        onChangeText={setEmail}
         autoCapitalize="none"
         autoCompleteType="email"
         textContentType="emailAddress"
         keyboardType="email-address"
       />
-      <TextInput
-        label="Password"
-        value={password}
-        onChangeText={(pswd) => setPassword(pswd)}
-        secureTextEntry
-      />
+      <TextInput label="Password" value={password} onChangeText={(pswd) => setPassword(pswd)} secureTextEntry />
       <Button mode="contained" onPress={onLogin}>
         Login
       </Button>
+      {invalidLogIn ? (
+        <View style={styles.row}>
+          <Text style={styles.error}>Invalid Email or Password</Text>
+        </View>
+      ) : null}
       <View style={styles.row}>
         <Text style={styles.label}>Don’t have an account? </Text>
         <TouchableOpacity onPress={() => navigation.navigate("Register")}>
@@ -55,6 +64,10 @@ const styles = StyleSheet.create({
   },
   label: {
     color: theme.colors.secondary,
+  },
+  error: {
+    color: "red",
+    fontWeight: "bold",
   },
   link: {
     fontWeight: "bold",
@@ -84,4 +97,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+const mapDispatchToProps = {
+  loginUser,
+};
+
+export default connect(null, mapDispatchToProps)(Login);
