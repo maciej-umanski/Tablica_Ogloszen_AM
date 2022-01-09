@@ -11,7 +11,9 @@ const MainWallScreen = ({ navigation }) => {
   const posts = useSelector((state) => state.posts);
 
   useEffect(() => {
-    dispatch(getPosts());
+    if(!posts.length){
+      dispatch(getPosts());
+    }
   }, []);
 
   const showDetails = (itemId) => navigation.navigate("Advert", { itemId });

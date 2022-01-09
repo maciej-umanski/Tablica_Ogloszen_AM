@@ -1,10 +1,6 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  NavigationContainer,
-  DefaultTheme,
-  DarkTheme,
-} from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme, DarkTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
@@ -23,17 +19,12 @@ import ProfileScreen from "../screens/ProfileScreen";
 import { RootStackParamList, RootTabParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import AdvertScreen from "../screens/AdvertScreen";
+import EditAdvertScreen from "../screens/EditAdvertScreen";
 
-export default function Navigation({
-  colorScheme,
-}: {
-  colorScheme: ColorSchemeName;
-}) {
+
+export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-    >
+    <NavigationContainer linking={LinkingConfiguration} theme={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <RootNavigator />
     </NavigationContainer>
   );
@@ -44,31 +35,13 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
   return (
     <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Register"
-        component={Register}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Root"
-        component={DrawerNavigator}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
-      />
-      <Stack.Screen
-      name="Advert"
-      component={AdvertScreen}
-      />
-      
+      <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+      <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
+      <Stack.Screen name="Root" component={DrawerNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: "Oops!" }} />
+      <Stack.Screen name="Advert" component={AdvertScreen} />
+      <Stack.Screen name="EditAdvert" component={EditAdvertScreen}/>
+
       <Stack.Group screenOptions={{ presentation: "modal" }}>
         <Stack.Screen name="Modal" component={ModalScreen} />
       </Stack.Group>
@@ -87,8 +60,7 @@ function BottomTabNavigator() {
       initialRouteName="MainWall"
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
-      }}
-    >
+      }}>
       <BottomTab.Screen
         name="MyWall"
         component={MyWallScreen}
@@ -129,9 +101,6 @@ function DrawerNavigator() {
   );
 }
 
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
-}) {
+function TabBarIcon(props: { name: React.ComponentProps<typeof FontAwesome>["name"]; color: string }) {
   return <FontAwesome size={30} style={{ marginBottom: -3 }} {...props} />;
 }

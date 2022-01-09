@@ -1,6 +1,6 @@
 import * as React from "react";
-import { View } from "react-native";
-import { Button, Dialog, Portal } from "react-native-paper";
+import { View, Modal, StyleSheet } from "react-native";
+import { Button, Title } from "react-native-paper";
 
 type Props = {
   visible: boolean;
@@ -10,26 +10,38 @@ type Props = {
 const AddPhotoDialog = ({ visible, hideDialog }: Props) => {
   return (
     <View>
-      <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Title>Upload Photo</Dialog.Title>
-          <Dialog.Content
-            style={{ flexDirection: "row", justifyContent: "space-around" }}
-          >
+      <Modal visible={visible}>
+        <View style={styles.centeredView}>
+          <Title>Upload Photo</Title>
+          <View style={styles.row}>
             <Button mode="contained" onPress={() => null}>
               gallery
             </Button>
             <Button mode="contained" onPress={() => null}>
               camera
             </Button>
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={hideDialog}>Cancel</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+          </View>
+          <Button onPress={hideDialog}>Cancel</Button>
+        </View>
+      </Modal>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  row: {
+    flexDirection: "row",
+    marginTop: 25,
+    marginBottom: 25,
+    justifyContent: "space-around",
+    width: "80%",
+  },
+});
 
 export default AddPhotoDialog;

@@ -69,7 +69,7 @@ const Register = ({ navigation, register, users, getUsers }) => {
     } else if (isPasswordInvalid()) {
       setPasswordError(true);
     } else {
-      register({ name: name, email: email, password: password }, () => {
+      register({ name: name, surname: surname, email: email, password: password, phone_number: phoneNumber }, () => {
         navigation.navigate("Root");
       });
     }
