@@ -11,7 +11,6 @@ import useColorScheme from "../hooks/useColorScheme";
 import Login from "../screens/LoginScreen";
 import Register from "../screens/RegisterScreen";
 import NotFoundScreen from "../screens/NotFoundScreen";
-import ModalScreen from "../screens/ModalScreen";
 import AddAdvertScreen from "../screens/AddAdvertScreen";
 import MainWallScreen from "../screens/MainWallScreen";
 import MyWallScreen from "../screens/MyWallScreen";
@@ -41,10 +40,6 @@ function RootNavigator() {
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: "Oops!" }} />
       <Stack.Screen name="Advert" component={AdvertScreen} />
       <Stack.Screen name="EditAdvert" component={EditAdvertScreen}/>
-
-      <Stack.Group screenOptions={{ presentation: "modal" }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
     </Stack.Navigator>
   );
 }

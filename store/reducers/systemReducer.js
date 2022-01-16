@@ -1,16 +1,23 @@
-import { LOGIN, LOGOUT} from "../actions/system"
+import {
+    LOGIN,
+    LOGOUT,
+    EDIT_LOGGED_USER
+} from "../actions/system"
 
 const systemInitialState = {
     user: {},
-    isLogged: false
+    isLogged: false,
+    token: ""
 }
 
 const systemReducer = (state = systemInitialState, action) => {
-    switch (action.type){
+    switch (action.type) {
         case LOGIN:
-            return { user: action.data, isLogged: true};
+            return {user: action.data.user, isLogged: true, token: action.data.token};
         case LOGOUT:
             return {...systemInitialState};
+        case EDIT_LOGGED_USER:
+            return {...state, user: action.data}
         default:
             return state;
     }

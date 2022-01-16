@@ -3,7 +3,8 @@ import {
     SERVER_HOST
 } from "../../conf";
 import {
-    login
+    login,
+    editLoggedUser
 } from "./system"
 
 export const CREATE_USER = "CREATE_USER";
@@ -39,9 +40,11 @@ export const deleteUser = (id) => {
 export const register = (data, callback = () => null) => {
     return (dispatch) => {
         axios.post(`${SERVER_HOST}/sign_up`, data).then((response) => {
-            dispatch(addUser(response.data[0]));
-            dispatch(login(response.data[0]))
-            callback()
+            if (response.data?.success) {
+                dispatch(login(response.data))
+                dispatch(addUser(response.data.user));
+                callback(response.data)
+            }
         }).catch(err => console.warn(err.response))
     }
 }
@@ -57,14 +60,16 @@ export const getUsers = (callback = () => null) => {
 
 export const getUserById = (id, callback = () => null) => {
     return axios.get(`${SERVER_HOST}/users/${id}`).then((response) => {
-        callback(response.data[0])
+        callback(response.data)
     }).catch(err => console.warn(err.response))
 }
 
-export const updateUser = (data) => {
+export const updateUser = (data, callback = () => null) => {
     return (dispatch) => {
         axios.put(`${SERVER_HOST}/users`, data).then((response) => {
+            dispatch(editLoggedUser(response.data))
             dispatch(editUser(response.data));
+            callback(response.data);
         }).catch(err => console.warn(err.response))
     }
 }
