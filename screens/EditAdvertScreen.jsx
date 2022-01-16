@@ -53,7 +53,7 @@ const EditAdvertScreen = ({ navigation, route }) => {
   const savePost = () => {
     dispatch(
       updatePost({ ...post, title: title, content: content, date: getDateString(post.date, "yyyy-MM-dd HH:mm:ss") }, () => {
-        openModal("Saved !!");
+        openModal();
         setTimeout(closeModal, 1000);
       })
     );

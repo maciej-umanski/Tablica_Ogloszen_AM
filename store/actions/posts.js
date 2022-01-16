@@ -36,8 +36,8 @@ export const deletePost = (id) => {
 export const createPost = (data, callback = () => null) => {
     return (dispatch) => {
         axios.post(`${SERVER_HOST}/posts`, data).then((response) => {
-            dispatch(addPost(response.data[0]));
-            callback(response.data[0])
+            dispatch(addPost(response.data));
+            callback(response.data)
         }).catch(err => console.warn(err.response))
     }
 }
@@ -57,7 +57,7 @@ export const updatePost = (data, callback = () => null) => {
         }).catch(err => console.warn(err.response))
     }
 }
-export const removePost = (postId, callback=() => null) => {
+export const removePost = (postId, callback = () => null) => {
     return (dispatch) => {
         axios.delete(`${SERVER_HOST}/posts/${postId}`).then((response) => {
             dispatch(deletePost(postId))
@@ -68,6 +68,6 @@ export const removePost = (postId, callback=() => null) => {
 
 export const getPostById = (id) => {
     return axios.get(`${SERVER_HOST}/posts/${id}`).then((response) => {
-        return response.data[0];
+        return response.data;
     }).catch(err => console.warn(err.response))
 }

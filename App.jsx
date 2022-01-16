@@ -7,7 +7,10 @@ import useColorScheme from "./hooks/useColorScheme";
 import Navigation from "./navigation";
 
 import store from "./store/configureStore";
+import { injectStore } from "./axios/axios";
 import { Provider } from "react-redux";
+
+injectStore(store);
 
 export default function App() {
   const isLoadingComplete = useCachedResources();

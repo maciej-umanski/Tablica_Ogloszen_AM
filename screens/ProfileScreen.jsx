@@ -1,69 +1,81 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { theme } from "../core/theme";
-import Header from "../components/Header";
+import { StyleSheet } from "react-native";
+import { View } from "../components/Themed";
 import Button from "../components/Button";
 import TextInput from "../components/TextInput";
-import BackButton from "../components/BackButton";
+import InfoPopup from "../components/InfoPopup";
 
-import { register, getUsers } from "../store/actions/users";
-import { isPasswordInvalid, isEmailInvalid, isPhoneNumberInvalid } from "../utils/utils";
+import { logoutUser } from "../store/actions/system";
+import { updateUser, getUsers } from "../store/actions/users";
+import { isPasswordInvalid, isPhoneNumberInvalid } from "../utils/utils";
 
-const Register = ({ navigation }) => {
+const ProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users);
+  const loggedUser = useSelector((state) => state.system.user);
 
   const [name, setName] = useState("");
-  const [nameError, setNameError] = useState(false);
   const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState(false);
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
   const [passwordError, setPasswordError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("Error");
   const [surname, setSurname] = useState("");
-  const [surnameError, setSurnameError] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [phoneNumberError, setPhoneNumberError] = useState(false);
+  const [infoOpen, isInfoOpen] = useState(false);
+
+  const openModal = () => isInfoOpen(true);
+  const closeModal = () => isInfoOpen(false);
 
   useEffect(() => {
-    dispatch(getUsers());
+    if (!users.length) {
+      dispatch(getUsers());
+    }
+    setName(loggedUser.name);
+    setSurname(loggedUser.surname);
+    setPassword(loggedUser.password);
+    setRePassword(loggedUser.password);
+    setEmail(loggedUser.email);
+    setPhoneNumber(loggedUser.phone_number);
   }, []);
 
   const clearErrors = () => {
-    setNameError(false);
-    setSurnameError(false);
-    setEmailError(false);
     setPasswordError(false);
     setErrorMessage("");
     setPhoneNumberError(false);
   };
 
-  const onSignUp = () => {
+  const onLogout = () => {
+    dispatch(logoutUser());
+    navigation.navigate("Login");
+  };
+
+  const onEdit = () => {
     clearErrors();
-    if (isEmailInvalid(users, email, setErrorMessage)) {
-      setEmailError(true);
-    } else if (isPasswordInvalid(password, rePassword, setErrorMessage)) {
+    if (isPasswordInvalid(password, rePassword, setErrorMessage)) {
       setPasswordError(true);
     } else if (isPhoneNumberInvalid(phoneNumber, setErrorMessage)) {
       setPhoneNumberError(true);
     } else {
       dispatch(
-        register({ name: name, surname: surname, email: email, password: password, phone_number: phoneNumber }, () => {
-          navigation.navigate("Root");
-        })
+        updateUser(
+          { ...loggedUser, name: name, surname: surname, email: email, password: password, phone_number: phoneNumber },
+          (responseData) => {
+            openModal();
+            setTimeout(closeModal, 1000);
+          }
+        )
       );
     }
   };
 
   return (
     <View style={styles.container}>
-      <BackButton goBack={() => navigation.navigate("Login")} />
-      <Header>Create Account</Header>
-      <TextInput label="Name" value={name} onChangeText={setName} error={nameError} errorText={errorMessage} />
-      <TextInput label="Surname" value={surname} onChangeText={setSurname} error={surnameError} errorText={errorMessage} />
+      <TextInput label="Name" value={name} onChangeText={setName} />
+      <TextInput label="Surname" value={surname} onChangeText={setSurname} />
       <TextInput
         label="Email"
         value={email}
@@ -72,8 +84,7 @@ const Register = ({ navigation }) => {
         autoCompleteType="email"
         textContentType="emailAddress"
         keyboardType="email-address"
-        error={emailError}
-        errorText={errorMessage}
+        disabled
       />
       <TextInput
         label="Phone Number"
@@ -99,35 +110,18 @@ const Register = ({ navigation }) => {
         error={passwordError}
         errorText={errorMessage}
       />
-      <Button mode="contained" onPress={onSignUp} style={styles.button}>
-        Sign Up
+      <Button mode="contained" onPress={onEdit} style={styles.button}>
+        Edit
       </Button>
-
-      <View style={styles.row}>
-        <Text style={styles.label}>Already have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-          <Text style={styles.link}>Login</Text>
-        </TouchableOpacity>
-      </View>
+      <Button mode="contained" onPress={onLogout}>
+        Logout
+      </Button>
+      <InfoPopup visible={infoOpen} message="Edited !!" />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  label: {
-    color: theme.colors.secondary,
-  },
-  button: {
-    marginTop: 24,
-  },
-  row: {
-    flexDirection: "row",
-    marginTop: 4,
-  },
-  link: {
-    fontWeight: "bold",
-    color: theme.colors.primary,
-  },
   container: {
     flex: 1,
     width: "100%",
@@ -135,10 +129,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     padding: 30,
   },
-  error: {
-    color: "red",
-    fontWeight: "bold",
-  },
 });
 
-export default Register;
+export default ProfileScreen;

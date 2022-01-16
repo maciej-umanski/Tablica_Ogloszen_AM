@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { theme } from "../core/theme";
@@ -10,20 +10,31 @@ import TextInput from "../components/TextInput";
 
 import { loginUser } from "../store/actions/system";
 
-const Login = ({ navigation, loginUser }) => {
+const Login = ({ navigation }) => {
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [invalidLogIn, isInvalidLogIn] = useState(false);
 
+  const clearData = () => {
+    setEmail("");
+    setPassword("");
+    isInvalidLogIn(false);
+  };
+
   const onLogin = () => {
-    loginUser({ email: email, password: password }, (responseData) => {
-      if (responseData?.success) {
-        isInvalidLogIn(false);
-        navigation.navigate("Root");
-      } else {
-        isInvalidLogIn(true);
-      }
-    });
+    dispatch(
+      loginUser({ email: email, password: password }, (responseData) => {
+        if (responseData?.success) {
+          isInvalidLogIn(false);
+          navigation.navigate("Root");
+          clearData();
+        } else {
+          isInvalidLogIn(true);
+        }
+      })
+    );
   };
 
   return (
@@ -97,8 +108,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapDispatchToProps = {
-  loginUser,
-};
-
-export default connect(null, mapDispatchToProps)(Login);
+export default Login;

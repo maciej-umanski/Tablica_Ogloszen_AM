@@ -3,10 +3,18 @@ import {SERVER_HOST} from "../../conf";
 
 export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
+export const EDIT_LOGGED_USER = "EDIT_LOGGED_USER";
 
 export const login = (data) => {
     return {
         type: LOGIN,
+        data: data
+    }
+}
+
+export const editLoggedUser = (data) => {
+    return {
+        type: EDIT_LOGGED_USER,
         data: data
     }
 }
@@ -19,20 +27,17 @@ export const logout = () => {
 
 export const loginUser = (data, callback = () => null) => {
     return (dispatch) => {
-        axios.post(`${SERVER_HOST}/login`, data).then((response) => {
-            if(response.data?.success){
-                dispatch(login(response.data?.user))
+        axios.post(`${SERVER_HOST}/login`, data).then(async (response) => {
+            if (response.data?.success) {
+                dispatch(login(response.data))
             }
             callback(response.data)
-    }).catch(err => console.warn(err.response))
-}
+        }).catch(err => console.warn(err.response))
+    }
 }
 
-// TODO:dodać na backendzie endpoint
-export const logoutUser = (dataId) => {
+export const logoutUser = () => {
     return dispatch => {
-        axios.post(`${SERVER_HOST}/logout`, dataId).then((response) => {
-            dispatch(logout())
-    }).catch(err => console.warn(err.response))
-}
+        dispatch(logout())
+    }
 }
