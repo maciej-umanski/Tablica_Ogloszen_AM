@@ -2,12 +2,11 @@ import * as React from "react";
 import { View, Modal, StyleSheet } from "react-native";
 import { Button, Title } from "react-native-paper";
 
-type Props = {
-  visible: boolean;
-  hideDialog: () => void;
-};
-
-const AddPhotoDialog = ({ visible, hideDialog }: Props) => {
+const AddPhotoDialog = ({ visible, hideDialog, navigation }) => {
+  onAddPhotoClick = () => {
+    navigation.navigate("Camera");
+    hideDialog();
+  };
   return (
     <View>
       <Modal visible={visible}>
@@ -17,7 +16,7 @@ const AddPhotoDialog = ({ visible, hideDialog }: Props) => {
             <Button mode="contained" onPress={() => null}>
               gallery
             </Button>
-            <Button mode="contained" onPress={() => null}>
+            <Button mode="contained" onPress={onAddPhotoClick}>
               camera
             </Button>
           </View>

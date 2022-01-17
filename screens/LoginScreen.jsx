@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { theme } from "../core/theme";
-import { Text, View } from "../components/Themed";
+import { Text } from "../components/Themed";
 import Button from "../components/Button";
 import Header from "../components/Header";
 import TextInput from "../components/TextInput";
@@ -42,6 +42,7 @@ const Login = ({ navigation }) => {
       <Header>Login</Header>
       <TextInput
         label="Email"
+        placeholder="Email"
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
@@ -49,7 +50,7 @@ const Login = ({ navigation }) => {
         textContentType="emailAddress"
         keyboardType="email-address"
       />
-      <TextInput label="Password" value={password} onChangeText={(pswd) => setPassword(pswd)} secureTextEntry />
+      <TextInput label="Password" placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry />
       <Button mode="contained" onPress={onLogin}>
         Login
       </Button>
@@ -90,6 +91,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 30,
+    backgroundColor: "white",
+    color: "black",
   },
   header: {
     fontSize: 26,

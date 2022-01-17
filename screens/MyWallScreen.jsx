@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { StyleSheet, Text } from "react-native";
-import { ScrollView, View } from "../components/Themed";
+import { StyleSheet, Text, View } from "react-native";
+import { ScrollView } from "../components/Themed";
 import AdvertCard from "../components/AdvertCard";
 
 import { getPosts } from "../store/actions/posts";

@@ -16,6 +16,7 @@ export type RootStackParamList = {
   NotFound: undefined;
   Advert: { itemId: string };
   EditAdvert: { itemId: string };
+  Camera: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, Screen>;
@@ -34,16 +35,3 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> = Composit
   NativeStackScreenProps<RootStackParamList>
 >;
 
-export type Advert = {
-  id: string;
-  author: {
-    id: number;
-    name: string;
-    surname: string;
-  };
-  postTime: string;
-  content: string;
-  photos: string;
-  phoneNumber: string;
-  title: string;
-};

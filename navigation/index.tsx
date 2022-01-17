@@ -19,7 +19,7 @@ import { RootStackParamList, RootTabParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import AdvertScreen from "../screens/AdvertScreen";
 import EditAdvertScreen from "../screens/EditAdvertScreen";
-
+import CameraScreen from "../screens/Camera";
 
 export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
   return (
@@ -39,7 +39,8 @@ function RootNavigator() {
       <Stack.Screen name="Root" component={DrawerNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: "Oops!" }} />
       <Stack.Screen name="Advert" component={AdvertScreen} />
-      <Stack.Screen name="EditAdvert" component={EditAdvertScreen}/>
+      <Stack.Screen name="EditAdvert" component={EditAdvertScreen} />
+      <Stack.Screen name="Camera" component={CameraScreen} />
     </Stack.Navigator>
   );
 }
