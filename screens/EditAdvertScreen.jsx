@@ -10,7 +10,7 @@ import Header from "../components/Header";
 import Button from "../components/Button";
 import AddPhotoDialog from "../components/AddPhotoDialog";
 
-import { getDateString } from "../utils/utils";
+import { getDateString, getPhotoUrl } from "../utils/utils";
 import { updatePost, removePost } from "../store/actions/posts";
 import InfoPopup from "../components/InfoPopup";
 
@@ -93,11 +93,11 @@ const EditAdvertScreen = ({ navigation, route }) => {
         error={!content}
       />
       <TouchableOpacity onPress={showDialog}>
-        <ImageBackground source={{ uri: "https://picsum.photos/700" }} style={styles.img}>
+        <ImageBackground source={post?.photo ? { uri: getPhotoUrl(post.photo) } : require("../assets/no-photo.jpg")} style={styles.img}>
           <Text style={styles.editPhotoBtn}>Edit photo</Text>
         </ImageBackground>
       </TouchableOpacity>
-      <AddPhotoDialog visible={photoDialogVisible} hideDialog={hideDialog} />
+      <AddPhotoDialog visible={photoDialogVisible} hideDialog={hideDialog} navigation={navigation}/>
 
       <View style={styles.row}>
         <Button mode="contained" onPress={confirmedDeleting} style={styles.button} icon="delete">

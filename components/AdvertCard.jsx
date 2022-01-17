@@ -6,7 +6,7 @@ import { Card, Paragraph } from "react-native-paper";
 import Button from "./Button";
 
 import { getUsers } from "../store/actions/users";
-import { getDateString } from "../utils/utils";
+import { getDateString, getPhotoUrl } from "../utils/utils";
 
 const AdvertCard = ({ advert, showDetails, editMode, editPost }) => {
   const dispatch = useDispatch();
@@ -33,13 +33,15 @@ const AdvertCard = ({ advert, showDetails, editMode, editPost }) => {
       <Card.Title
         title={advert.title}
         subtitle={`${getDateString(advert?.date)} - ${author?.name || ""} ${author?.surname || ""}`}
+        titleStyle={styles.text}
+        subtitleStyle={styles.subText}
       />
       <Card.Content style={styles.content}>
-        <Paragraph numberOfLines={2} ellipsizeMode="tail">
+        <Paragraph numberOfLines={2} ellipsizeMode="tail" style={styles.text}>
           {advert.content}
         </Paragraph>
       </Card.Content>
-      <Card.Cover source={{ uri: "https://picsum.photos/700" }} />
+      <Card.Cover source={advert.photo ? { uri: getPhotoUrl(advert.photo) } : require("../assets/no-photo.jpg")} />
       <Card.Actions>
         {editMode ? (
           <Button mode="contained" onPress={handleEdit}>
@@ -59,10 +61,17 @@ const styles = StyleSheet.create({
   container: {
     flexShrink: 1,
     marginBottom: 30,
+    backgroundColor: "white",
   },
   content: {
     width: "80%",
     marginBottom: 7,
+  },
+  text: {
+    color: "black",
+  },
+  subText: {
+    color: "#595959",
   },
 });
 

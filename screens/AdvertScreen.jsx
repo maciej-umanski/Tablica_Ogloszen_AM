@@ -7,7 +7,7 @@ import { Paragraph, Button, Text } from "react-native-paper";
 import Header from "../components/Header";
 import { View } from "../components/Themed";
 
-import { getDateString } from "../utils/utils";
+import { getDateString, getPhotoUrl } from "../utils/utils";
 
 const AdvertScreen = ({ route }) => {
   const dispatch = useDispatch();
@@ -60,7 +60,7 @@ const AdvertScreen = ({ route }) => {
       <Header style={styles.title}>{post?.title}</Header>
       <Text style={styles.details}>{`Author: ${author?.name} ${author?.surname} Date: ${getDateString(post?.date)}`}</Text>
       <Paragraph style={styles.content}>{post?.content}</Paragraph>
-      <Image source={{ uri: "https://picsum.photos/700" }} style={styles.img} />
+      <Image source={post.photo ? { uri: getPhotoUrl(post.photo) } : require("../assets/no-photo.jpg")} style={styles.img} />
       <Button style={styles.contact} mode="contained" icon="phone" onPress={makePhoneCall}>{`${author?.phone_number}`}</Button>
       {callError ? callAlert() : null}
     </View>
