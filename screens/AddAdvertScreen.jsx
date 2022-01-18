@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { StyleSheet } from "react-native";
+import {Platform, StyleSheet} from "react-native";
 import { TextInput, Provider } from "react-native-paper";
 import { View } from "../components/Themed";
 import Header from "../components/Header";
@@ -59,7 +59,7 @@ const AddAdvertScreen = ({ navigation }) => {
         <Button mode="contained" onPress={showDialog} style={styles.photoUploadBtn}>
           Add photo
         </Button>
-        <AddPhotoDialog visible={photoDialogVisible} hideDialog={hideDialog} />
+        <AddPhotoDialog visible={photoDialogVisible} hideDialog={hideDialog} navigation = {navigation}/>
       </Provider>
 
       <Button mode="contained" onPress={addPost} style={styles.button} disabled={photoDialogVisible || !allFieldsTyped()}>
