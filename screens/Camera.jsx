@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {StyleSheet, Text, View, TouchableOpacity, Platform} from "react-native";
 import { IconButton } from "react-native-paper";
 import { Camera } from "expo-camera";
+import {SERVER_HOST} from "../conf";
+import axios from "axios";
+import uuid from 'react-native-uuid';
 
 const CameraScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -23,14 +26,29 @@ const CameraScreen = () => {
     return <Text>No access to camera</Text>;
   }
 
+  const createFormData = (photo, name) => {
+    const data = new FormData();
+    data.append('photo', {
+      name: name,
+      type: 'image/jpg',
+      uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
+    });
+    return data;
+  };
+
   const takePhoto = async () => {
     if (this.camera) {
       let photo = await this.camera.takePictureAsync();
-      //wyświetlenie zdjecia
-      //zapis zdjecia na serwerze
+      let filename = uuid.v4() + '.jpg';
+      let body = createFormData(photo,filename);
+      axios.post(`${SERVER_HOST}/upload`, body).then((response) => {
+        console.log(response.data);
+      }).catch((error) => {console.log(error)})
+
+      //zdjęcie zostało zapisane do bazy danych pod adresem ${SERVER_HOST}/uploads/filename
+
       //zapis id z serwera do bazy danych jako posts.photo
       //aktualizacja zdjecia na tablicy MainWall i MyWall
-      console.log(photo);
     }
   };
 

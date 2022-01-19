@@ -3,10 +3,7 @@ import { View, Modal, StyleSheet } from "react-native";
 import { Button, Title } from "react-native-paper";
 
 const AddPhotoDialog = ({ visible, hideDialog, navigation }) => {
-  onAddPhotoClick = () => {
-    navigation.navigate("Camera");
-    hideDialog();
-  };
+
   return (
     <View>
       <Modal visible={visible}>
@@ -16,7 +13,10 @@ const AddPhotoDialog = ({ visible, hideDialog, navigation }) => {
             <Button mode="contained" onPress={() => null}>
               gallery
             </Button>
-            <Button mode="contained" onPress={onAddPhotoClick}>
+            <Button mode="contained" onPress={() => {
+              navigation.navigate("Camera");
+              hideDialog();
+            }}>
               camera
             </Button>
           </View>
