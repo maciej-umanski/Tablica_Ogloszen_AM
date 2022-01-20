@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import {StyleSheet, Text, View, TouchableOpacity, Platform} from "react-native";
-import { IconButton } from "react-native-paper";
 import { Camera } from "expo-camera";
-import {SERVER_HOST} from "../conf";
+import { SERVER_HOST } from "../conf";
 import axios from "axios";
-import uuid from 'react-native-uuid';
+import uuid from "react-native-uuid";
 
-const CameraScreen = () => {
+import { StyleSheet, Text, View, TouchableOpacity, Platform } from "react-native";
+import { IconButton } from "react-native-paper";
+
+const CameraScreen = ({ route, navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
-  const [type, setType] = useState(Camera.Constants.Type.back);
 
   let camera = null;
 
@@ -28,27 +28,36 @@ const CameraScreen = () => {
 
   const createFormData = (photo, name) => {
     const data = new FormData();
-    data.append('photo', {
+    data.append("photo", {
       name: name,
-      type: 'image/jpg',
-      uri: Platform.OS === 'ios' ? photo.uri.replace('file://', '') : photo.uri,
+      type: "image/jpg",
+      uri: Platform.OS === "ios" ? photo.uri.replace("file://", "") : photo.uri,
     });
     return data;
   };
 
   const takePhoto = async () => {
     if (this.camera) {
-      let photo = await this.camera.takePictureAsync();
-      let filename = uuid.v4() + '.jpg';
-      let body = createFormData(photo,filename);
-      axios.post(`${SERVER_HOST}/upload`, body).then((response) => {
-        console.log(response.data);
-      }).catch((error) => {console.log(error)})
+      const photo = await this.camera.takePictureAsync();
+      const filename = uuid.v4() + ".jpg";
+      const body = createFormData(photo, filename);
+      axios
+        .post(`${SERVER_HOST}/upload`, body)
+        .then((response) => {
+          const filename = response.data.filename;
+          closeCamera(filename);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
 
-      //zdjęcie zostało zapisane do bazy danych pod adresem ${SERVER_HOST}/uploads/filename
-
-      //zapis id z serwera do bazy danych jako posts.photo
-      //aktualizacja zdjecia na tablicy MainWall i MyWall
+  closeCamera = (filename) => {
+    if (route.params.postId) {
+      navigation.navigate("EditAdvert", { itemId: route.params.postId, filename: filename });
+    } else {
+      navigation.navigate("AddAdvert", { filename: filename });
     }
   };
 
@@ -56,7 +65,7 @@ const CameraScreen = () => {
     <View style={styles.container}>
       <Camera
         style={styles.camera}
-        type={type}
+        type={Camera.Constants.Type.back}
         ref={(ref) => {
           this.camera = ref;
         }}>
@@ -87,12 +96,6 @@ const styles = StyleSheet.create({
     flex: 0.1,
     alignSelf: "flex-end",
     alignItems: "center",
-  },
-  actionButton: {
-    color: "red",
-    height: 30,
-    width: 30,
-    borderRadius: 15,
   },
 });
 

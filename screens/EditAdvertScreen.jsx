@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { SERVER_HOST } from "../conf";
 
 import { StyleSheet, ImageBackground, Alert } from "react-native";
 import { TextInput, Text } from "react-native-paper";
@@ -9,10 +10,10 @@ import { View } from "../components/Themed";
 import Header from "../components/Header";
 import Button from "../components/Button";
 import AddPhotoDialog from "../components/AddPhotoDialog";
-
-import { getDateString, getPhotoUrl } from "../utils/utils";
-import { updatePost, removePost } from "../store/actions/posts";
 import InfoPopup from "../components/InfoPopup";
+
+import { getDateString } from "../utils/utils";
+import { updatePost, removePost } from "../store/actions/posts";
 
 const EditAdvertScreen = ({ navigation, route }) => {
   const posts = useSelector((state) => state.posts);
@@ -21,8 +22,30 @@ const EditAdvertScreen = ({ navigation, route }) => {
   const [post, setPost] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [photo, setPhoto] = useState(null);
   const [photoDialogVisible, setPhotoDialogVisible] = useState(false);
   const [infoOpen, isInfoOpen] = useState(false);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: (props) => <HeaderBackButton {...props} onPress={() => navigation.navigate("MyWall", { refresh: true })} />,
+    });
+  }, [navigation]);
+
+  useEffect(() => {
+    if (route.params.filename) {
+      setPhoto(route.params.filename);
+    }
+  }, [route.params.filename]);
+
+  useEffect(() => {
+    const post = posts.find((item) => item.id === route.params.itemId);
+    if (post) {
+      setTitle(post.title);
+      setContent(post.content);
+      setPost(post);
+    }
+  }, [route.params.itemId]);
 
   const showDialog = () => setPhotoDialogVisible(true);
   const hideDialog = () => setPhotoDialogVisible(false);
@@ -35,27 +58,15 @@ const EditAdvertScreen = ({ navigation, route }) => {
     return false;
   };
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: (props) => <HeaderBackButton {...props} onPress={() => navigation.navigate("MyWall", { refresh: true })} />,
-    });
-  }, [navigation]);
-
-  useEffect(() => {
-    const post = posts.find((item) => item.id === route.params.itemId);
-    if (post) {
-      setTitle(post.title);
-      setContent(post.content);
-      setPost(post);
-    }
-  }, [route.params.itemId]);
-
   const savePost = () => {
     dispatch(
-      updatePost({ ...post, title: title, content: content, date: getDateString(post.date, "yyyy-MM-dd HH:mm:ss") }, () => {
-        openModal();
-        setTimeout(closeModal, 1000);
-      })
+      updatePost(
+        { ...post, title: title, content: content, photo: photo, date: getDateString(post.date, "yyyy-MM-dd HH:mm:ss") },
+        () => {
+          openModal();
+          setTimeout(closeModal, 1000);
+        }
+      )
     );
   };
 
@@ -93,11 +104,15 @@ const EditAdvertScreen = ({ navigation, route }) => {
         error={!content}
       />
       <TouchableOpacity onPress={showDialog}>
-        <ImageBackground source={post?.photo ? { uri: getPhotoUrl(post.photo) } : require("../assets/no-photo.jpg")} style={styles.img}>
+        <ImageBackground
+          source={
+            photo || post?.photo ? { uri: `${SERVER_HOST}/uploads/${photo || post.photo}` } : require("../assets/no-photo.jpg")
+          }
+          style={styles.img}>
           <Text style={styles.editPhotoBtn}>Edit photo</Text>
         </ImageBackground>
       </TouchableOpacity>
-      <AddPhotoDialog visible={photoDialogVisible} hideDialog={hideDialog} navigation={navigation}/>
+      <AddPhotoDialog visible={photoDialogVisible} hideDialog={hideDialog} navigation={navigation} postId={post?.id} />
 
       <View style={styles.row}>
         <Button mode="contained" onPress={confirmedDeleting} style={styles.button} icon="delete">

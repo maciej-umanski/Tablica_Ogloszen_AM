@@ -2,6 +2,7 @@ import {
   format
 } from "date-fns";
 
+
 export const getDateString = (date, formatPattern = "dd.MM.yyyy HH:mm") => {
   if (!!!date) return "";
   return format(new Date(date), formatPattern);
@@ -36,8 +37,3 @@ export const isPhoneNumberInvalid = (phoneNumber, setErrorMsgCallback = () => nu
   }
   return false;
 };
-
-
-export const getPhotoUrl = (photoId) => {
-  return `https://drive.google.com/uc?export=view&id=${photoId}`
-}
