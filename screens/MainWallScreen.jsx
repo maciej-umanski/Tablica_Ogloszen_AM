@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import { StyleSheet } from "react-native";
 import AdvertCard from "../components/AdvertCard";
-
 import { ScrollView } from "../components/Themed";
-import { useSelector, useDispatch } from "react-redux";
+
 import { getPosts } from "../store/actions/posts";
 
 const MainWallScreen = ({ navigation }) => {
@@ -11,7 +12,7 @@ const MainWallScreen = ({ navigation }) => {
   const posts = useSelector((state) => state.posts);
 
   useEffect(() => {
-    if(!posts.length){
+    if (!posts.length) {
       dispatch(getPosts());
     }
   }, []);

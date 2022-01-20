@@ -37,6 +37,10 @@ const Login = ({ navigation }) => {
     );
   };
 
+  const goToRegister = () => {
+    navigation.navigate("Register");
+  };
+
   return (
     <View style={styles.container}>
       <Header>Login</Header>
@@ -61,7 +65,7 @@ const Login = ({ navigation }) => {
       ) : null}
       <View style={styles.row}>
         <Text style={styles.label}>Don’t have an account? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+        <TouchableOpacity onPress={goToRegister}>
           <Text style={styles.link}>Sign up</Text>
         </TouchableOpacity>
       </View>

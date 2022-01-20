@@ -1,25 +1,23 @@
 import * as React from "react";
+
 import { View, Modal, StyleSheet } from "react-native";
 import { Button, Title } from "react-native-paper";
 
-const AddPhotoDialog = ({ visible, hideDialog, navigation }) => {
+const AddPhotoDialog = ({ visible, hideDialog, navigation, postId }) => {
+
+  const openCamera = () => {
+    navigation.navigate("Camera", { postId: postId });
+    hideDialog();
+  };
 
   return (
     <View>
       <Modal visible={visible}>
         <View style={styles.centeredView}>
-          <Title>Upload Photo</Title>
-          <View style={styles.row}>
-            <Button mode="contained" onPress={() => null}>
-              gallery
-            </Button>
-            <Button mode="contained" onPress={() => {
-              navigation.navigate("Camera");
-              hideDialog();
-            }}>
-              camera
-            </Button>
-          </View>
+          <Title style={styles.items}>Upload Photo</Title>
+          <Button mode="contained" style={styles.items} onPress={openCamera}>
+            camera
+          </Button>
           <Button onPress={hideDialog}>Cancel</Button>
         </View>
       </Modal>
@@ -34,12 +32,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 22,
   },
-  row: {
-    flexDirection: "row",
-    marginTop: 25,
+  items: {
     marginBottom: 25,
-    justifyContent: "space-around",
-    width: "80%",
   },
 });
 

@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { ColorSchemeName } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { RootStackParamList, RootTabParamList } from "../types";
 
 import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
@@ -15,7 +16,6 @@ import AddAdvertScreen from "../screens/AddAdvertScreen";
 import MainWallScreen from "../screens/MainWallScreen";
 import MyWallScreen from "../screens/MyWallScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import { RootStackParamList, RootTabParamList } from "../types";
 import LinkingConfiguration from "./LinkingConfiguration";
 import AdvertScreen from "../screens/AdvertScreen";
 import EditAdvertScreen from "../screens/EditAdvertScreen";
@@ -33,7 +33,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator initialRouteName="Camera">
+    <Stack.Navigator initialRouteName="Login">
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
       <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
       <Stack.Screen name="Root" component={DrawerNavigator} options={{ headerShown: false }} />
@@ -49,7 +49,6 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
   const colorScheme = useColorScheme();
-  //TODO:zmiana ikon dla poszczególnych zakładek
 
   return (
     <BottomTab.Navigator
@@ -62,7 +61,7 @@ function BottomTabNavigator() {
         component={MyWallScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
         }}
       />
       <BottomTab.Screen
@@ -70,7 +69,7 @@ function BottomTabNavigator() {
         component={MainWallScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="newspaper-o" color={color} />,
         }}
       />
       <BottomTab.Screen
@@ -78,7 +77,7 @@ function BottomTabNavigator() {
         component={AddAdvertScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="plus-square" color={color} />,
         }}
       />
     </BottomTab.Navigator>

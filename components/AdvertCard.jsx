@@ -1,16 +1,18 @@
 import React, { memo, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { SERVER_HOST } from "../conf";
 
 import { StyleSheet } from "react-native";
 import { Card, Paragraph } from "react-native-paper";
 import Button from "./Button";
 
 import { getUsers } from "../store/actions/users";
-import { getDateString, getPhotoUrl } from "../utils/utils";
+import { getDateString } from "../utils/utils";
 
 const AdvertCard = ({ advert, showDetails, editMode, editPost }) => {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.users);
+
   const [author, setAuthor] = useState(null);
 
   useEffect(() => {
@@ -41,7 +43,9 @@ const AdvertCard = ({ advert, showDetails, editMode, editPost }) => {
           {advert.content}
         </Paragraph>
       </Card.Content>
-      <Card.Cover source={advert.photo ? { uri: getPhotoUrl(advert.photo) } : require("../assets/no-photo.jpg")} />
+      <Card.Cover
+        source={advert?.photo ? { uri: `${SERVER_HOST}/uploads/${advert.photo}` } : require("../assets/no-photo.jpg")}
+      />
       <Card.Actions>
         {editMode ? (
           <Button mode="contained" onPress={handleEdit}>
