@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     padding: 30,
   },
   error: {
-    color: "red",
+    color: theme.colors.error,
     fontWeight: "bold",
   },
 });
