@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     color: theme.colors.secondary,
   },
   error: {
-    color: "red",
+    color: theme.colors.error,
     fontWeight: "bold",
   },
   link: {

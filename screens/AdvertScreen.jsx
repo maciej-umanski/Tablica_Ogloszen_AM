@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import call from "react-native-phone-call";
 import { SERVER_HOST } from "../conf";
+import { theme } from "../core/theme";
 
 import { StyleSheet, Image, Alert } from "react-native";
 import { Paragraph, Button, Text } from "react-native-paper";
@@ -65,7 +66,12 @@ const AdvertScreen = ({ route }) => {
         source={post?.photo ? { uri: `${SERVER_HOST}/uploads/${post.photo}` } : require("../assets/no-photo.jpg")}
         style={styles.img}
       />
-      <Button style={styles.contact} mode="contained" icon="phone" onPress={makePhoneCall}>{`${author?.phone_number}`}</Button>
+      <Button
+        style={styles.contact}
+        color={theme.colors.primary}
+        mode="contained"
+        icon="phone"
+        onPress={makePhoneCall}>{`${author?.phone_number}`}</Button>
       {callError ? callAlert() : null}
     </View>
   ) : null;
